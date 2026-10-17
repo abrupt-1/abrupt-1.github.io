@@ -13,6 +13,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link rel="stylesheet" href="assets/css/style.css">
 <link rel="stylesheet" href="assets/css/stage1.css">
+<link rel="stylesheet" href="assets/css/stage2.css">
 <script>
   (function () {
     try {
@@ -37,7 +38,8 @@
     <a href="index.html" data-page="index">首页</a>
     <a href="chunks.html" data-page="chunks">词块库</a>
     <a href="list.html" data-page="list">列表</a>
-    <a href="method.html" data-page="method">复习方法</a>
+    <a href="review.html" data-page="review">复习</a>
+    <a href="method.html" data-page="method">方法</a>
   </nav>
   <span class="header-spacer"></span>
   <button class="theme-toggle" data-theme-toggle aria-label="切换主题">
@@ -62,44 +64,49 @@
         <li><a href="index.html" data-page="index">首页 · 学习路线</a></li>
         <li><a href="chunks.html" data-page="chunks">词块库 · 翻卡（82 条）</a></li>
         <li><a href="list.html" data-page="list">全部列表 · 搜索打印</a></li>
+        <li><a href="review.html" data-page="review">今日复习<span class="nav-badge" data-due-badge hidden>0</span></a></li>
         <li><a href="method.html" data-page="method">复习方法</a></li>
       </ul>
     </nav>
 
-    <nav class="nav-group" data-cat-nav>
-      <p class="nav-group-title">按动词分类</p>
-      <ul class="nav-list">
-        <li><a href="chunks.html#cat-make" data-page="chunks" data-cat-filter="make" data-cat-name="make + 名词">make + 名词<span class="nav-count" data-cat-nav-count="make">14</span></a></li>
-        <li><a href="chunks.html#cat-take" data-page="chunks" data-cat-filter="take" data-cat-name="take + 名词">take + 名词<span class="nav-count" data-cat-nav-count="take">14</span></a></li>
-        <li><a href="chunks.html#cat-do" data-page="chunks" data-cat-filter="do" data-cat-name="do + 名词">do + 名词<span class="nav-count" data-cat-nav-count="do">12</span></a></li>
-        <li><a href="chunks.html#cat-get" data-page="chunks" data-cat-filter="get" data-cat-name="get + 名词 / 形容词">get + 名词 / 形容词<span class="nav-count" data-cat-nav-count="get">12</span></a></li>
-        <li><a href="chunks.html#cat-have" data-page="chunks" data-cat-filter="have" data-cat-name="have + 名词">have + 名词<span class="nav-count" data-cat-nav-count="have">12</span></a></li>
-        <li><a href="chunks.html#cat-other" data-page="chunks" data-cat-filter="other" data-cat-name="其他高频动词搭配">其他高频动词搭配<span class="nav-count" data-cat-nav-count="other">18</span></a></li>
+    <nav class="nav-group">
+      <p class="nav-group-title">按话题分类</p>
+      <ul class="nav-list" data-topicnav>
+        <li><a href="list.html#topic-edu" data-page="list" data-topic-filter="edu">教育与学术<span class="nav-count" data-topic-nav-count="edu">27</span></a></li>
+        <li><a href="list.html#topic-work" data-page="list" data-topic-filter="work">工作与经济<span class="nav-count" data-topic-nav-count="work">13</span></a></li>
+        <li><a href="list.html#topic-society" data-page="list" data-topic-filter="society">社会与政策<span class="nav-count" data-topic-nav-count="society">16</span></a></li>
+        <li><a href="list.html#topic-life" data-page="list" data-topic-filter="life">日常生活<span class="nav-count" data-topic-nav-count="life">16</span></a></li>
+        <li><a href="list.html#topic-env" data-page="list" data-topic-filter="env">环境与健康<span class="nav-count" data-topic-nav-count="env">6</span></a></li>
+        <li><a href="list.html#topic-tech" data-page="list" data-topic-filter="tech">科技与媒体<span class="nav-count" data-topic-nav-count="tech">2</span></a></li>
+        <li><a href="list.html#topic-culture" data-page="list" data-topic-filter="culture">文化与心理<span class="nav-count" data-topic-nav-count="culture">2</span></a></li>
       </ul>
     </nav>
 
     <nav class="nav-group">
-      <p class="nav-group-title">按话题标签</p>
-      <div class="tag-cloud" data-tagcloud>
-        <button type="button" class="tag-chip" data-tag="城市">城市<span class="chip-count">1</span></button>
-        <button type="button" class="tag-chip" data-tag="工作">工作<span class="chip-count">13</span></button>
-        <button type="button" class="tag-chip" data-tag="环境">环境<span class="chip-count">11</span></button>
-        <button type="button" class="tag-chip" data-tag="家庭">家庭<span class="chip-count">2</span></button>
-        <button type="button" class="tag-chip" data-tag="健康">健康<span class="chip-count">8</span></button>
-        <button type="button" class="tag-chip" data-tag="教育">教育<span class="chip-count">11</span></button>
-        <button type="button" class="tag-chip" data-tag="经济">经济<span class="chip-count">1</span></button>
-        <button type="button" class="tag-chip" data-tag="科技">科技<span class="chip-count">5</span></button>
-        <button type="button" class="tag-chip" data-tag="日常">日常<span class="chip-count">27</span></button>
-        <button type="button" class="tag-chip" data-tag="商业">商业<span class="chip-count">6</span></button>
-        <button type="button" class="tag-chip" data-tag="社会">社会<span class="chip-count">33</span></button>
-        <button type="button" class="tag-chip" data-tag="文化">文化<span class="chip-count">2</span></button>
-        <button type="button" class="tag-chip" data-tag="消费">消费<span class="chip-count">2</span></button>
-        <button type="button" class="tag-chip" data-tag="写作">写作<span class="chip-count">3</span></button>
-        <button type="button" class="tag-chip" data-tag="心理">心理<span class="chip-count">2</span></button>
-        <button type="button" class="tag-chip" data-tag="学术">学术<span class="chip-count">9</span></button>
-        <button type="button" class="tag-chip" data-tag="学习">学习<span class="chip-count">16</span></button>
-        <button type="button" class="tag-chip" data-tag="政策">政策<span class="chip-count">5</span></button>
+      <p class="nav-group-title">筛选 · 动词</p>
+      <div class="chip-row" data-verbchips>
+        <button type="button" class="facet-chip" data-verb="make">make<span class="chip-count">14</span></button>
+        <button type="button" class="facet-chip" data-verb="take">take<span class="chip-count">14</span></button>
+        <button type="button" class="facet-chip" data-verb="do">do<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="get">get<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="have">have<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="other">other<span class="chip-count">18</span></button>
       </div>
+    </nav>
+
+    <nav class="nav-group">
+      <p class="nav-group-title">筛选 · 难度</p>
+      <div class="chip-row" data-levelchips>
+        <button type="button" class="facet-chip" data-level="B1">B1<span class="chip-count">7</span></button>
+        <button type="button" class="facet-chip" data-level="B1+">B1+<span class="chip-count">20</span></button>
+        <button type="button" class="facet-chip" data-level="B2">B2<span class="chip-count">55</span></button>
+      </div>
+    </nav>
+
+    <nav class="nav-group">
+      <p class="nav-group-title">当前筛选</p>
+      <div class="active-filters" data-active-filters></div>
+      <button type="button" class="btn btn--sm btn--block" data-clear-filters hidden>清除全部筛选</button>
     </nav>
   </aside>
 
@@ -111,13 +118,15 @@
         本站把雅思 6.0–6.5 的高频动词搭配整理成词块卡，每条都配例句和易错提示，直接练「能用的英语」。
       </p>
       <div class="btn-row">
-        <a class="btn btn--primary" href="chunks.html">进入词块库（82 条）</a>
+        <a class="btn btn--primary" href="review.html">开始今日复习</a>
+        <a class="btn" href="chunks.html">进入词块库（82 条）</a>
         <a class="btn" href="method.html">先看复习方法</a>
       </div>
+      <p class="due-line" data-due-line hidden></p>
       <div class="stat-row">
         <div class="stat"><strong>82</strong><span>条词块</span></div>
         <div class="stat"><strong>6</strong><span>个动词分类</span></div>
-        <div class="stat"><strong>18</strong><span>个话题标签</span></div>
+        <div class="stat"><strong>7</strong><span>个话题分类</span></div>
         <div class="stat"><strong>0</strong><span>外部依赖</span></div>
       </div>
     </div>
@@ -183,7 +192,7 @@
       <a class="card" href="chunks.html">
         <span class="card-icon" aria-hidden="true">🗂️</span>
         <h3>词块库</h3>
-        <p>按 make / take / do / get / have 及其他高频动词分组，支持搜索和按话题筛选。</p>
+        <p>按雅思话题域（教育 / 工作 / 社会 / 生活 / 环境 / 科技 / 文化）分类，可用动词和难度进一步筛选。</p>
         <span class="card-meta">82 条 · 含例句与易错提示</span>
       </a>
       <a class="card" href="method.html">
@@ -225,29 +234,30 @@
       <h4>本站</h4>
       <ul>
         <li><a href="index.html">首页 · 学习路线</a></li>
-        <li><a href="chunks.html">词块库</a></li>
-        <li><a href="method.html">复习方法</a></li>
+        <li><a href="chunks.html">词块库 · 翻卡</a></li>
+        <li><a href="list.html">全部列表</a></li>
+        <li><a href="review.html">今日复习</a></li>
       </ul>
     </div>
     <div>
       <h4>怎么用</h4>
       <ul>
         <li>先看<a href="method.html">复习方法</a>，了解词块怎么记</li>
-        <li>每天只复习「到期」的卡，复习优先于学新卡</li>
-        <li>用「遮挡中文」模式自测，答不出再展开</li>
+        <li>每天打开「今日复习」，只做排到今天的</li>
+        <li>复习优先于学新卡，宁可欠新卡不欠复习</li>
       </ul>
     </div>
     <div>
       <h4>说明</h4>
       <ul>
         <li>难度基准：雅思 6.0–6.5（B1+ ~ B2）</li>
-        <li>共 82 条词块，第一批</li>
-        <li>纯静态页面，可离线阅读、可打印</li>
+        <li>共 82 条词块 · 7 个话题</li>
+        <li>纯静态页面，进度存本地浏览器</li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
-    本站为个人英语复习用途的静态站点，内容由自己整理，无第三方追踪脚本。
+    本站为个人英语复习用途的静态站点，无第三方追踪脚本。复习进度保存在你自己的浏览器里，不上传任何服务器。
   </div>
 </footer>
 
@@ -257,5 +267,6 @@
 
 <script src="assets/js/app.js"></script>
 <script src="assets/js/stage1.js"></script>
+<script src="assets/js/stage2.js"></script>
 </body>
 </html>

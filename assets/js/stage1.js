@@ -1,12 +1,16 @@
 /* ==========================================================================
-   阶段一改造脚本
+   阶段一改造（阶段二已适配）
    ② 移动端顶栏自动隐藏
-   ④ 翻卡模式（上一个 / 下一个 / 分类筛选 / 键盘 / 滑动 / URL 锚点）
+   ④ 翻卡模式：上一个 / 下一个 / 键盘 / 滑动 / URL 锚点
 
-   与 app.js 的分工：
-   - app.js 负责主题、侧栏、搜索与标签筛选（写 hidden 属性）、遮挡中文、复制、进度条
-   - 本文件负责顶栏隐藏与翻卡；分类筛选用 data-cat-hidden 属性，
-     与 app.js 的 hidden 互不干扰（两者是与关系）。
+   与其它脚本的分工：
+   - app.js   主题、侧栏、搜索（写 hidden 属性）、遮挡中文、复制、进度条
+   - stage2.js 话题 / 动词 / 难度三组筛选项（写 data-facet-hidden 属性），
+               以及复习引擎
+   - 本文件   顶栏隐藏与翻卡
+
+   可见判定 = 无 hidden 属性 且 无 data-facet-hidden 属性（两者是与关系）。
+   筛选变化时 stage2.js 会派发 er:filters 事件，本文件据此重新对齐当前位置。
    ========================================================================== */
 (function () {
   'use strict';
@@ -83,41 +87,15 @@
     var nextBtn = doc.querySelector('[data-next]');
     var noRes = doc.querySelector('[data-no-result]');
 
-    var catLinks = Array.prototype.slice.call(doc.querySelectorAll('[data-cat-filter]'));
     var searchInputs = Array.prototype.slice.call(doc.querySelectorAll('[data-search]'));
-    var chips = Array.prototype.slice.call(doc.querySelectorAll('.tag-chip'));
-    var clearBtn = doc.querySelector('[data-clear]');
 
     var current = 0;
-    var catFilter = null;
 
     stage.classList.add('is-ready');
 
     function visible() {
       return cards.filter(function (c) {
-        return !c.hidden && !c.hasAttribute('data-cat-hidden');
-      });
-    }
-
-    function catNameOf(id) {
-      for (var i = 0; i < catLinks.length; i++) {
-        if (catLinks[i].getAttribute('data-cat-filter') === id) {
-          return catLinks[i].getAttribute('data-cat-name') || id;
-        }
-      }
-      return id;
-    }
-
-    function applyCat() {
-      cards.forEach(function (c) {
-        if (catFilter && c.getAttribute('data-cat') !== catFilter) {
-          c.setAttribute('data-cat-hidden', '');
-        } else {
-          c.removeAttribute('data-cat-hidden');
-        }
-      });
-      catLinks.forEach(function (a) {
-        a.classList.toggle('is-active', a.getAttribute('data-cat-filter') === catFilter);
+        return !c.hidden && !c.hasAttribute('data-facet-hidden');
       });
     }
 
@@ -131,7 +109,7 @@
       if (!vis.length) {
         cards.forEach(function (c) { c.classList.remove('is-current'); });
         if (posEl) posEl.textContent = '0 / 0';
-        if (catEl) catEl.textContent = catFilter ? catNameOf(catFilter) : '全部词块';
+        if (catEl) catEl.textContent = '没有匹配的词块';
         if (prevBtn) prevBtn.disabled = true;
         if (nextBtn) nextBtn.disabled = true;
         if (noRes) noRes.hidden = false;
@@ -148,7 +126,7 @@
       card.classList.add('is-current');
 
       if (posEl) posEl.textContent = (current + 1) + ' / ' + vis.length;
-      if (catEl) catEl.textContent = catNameOf(card.getAttribute('data-cat'));
+      if (catEl) catEl.textContent = card.getAttribute('data-topic-name') || '全部词块';
       if (prevBtn) prevBtn.disabled = current === 0;
       if (nextBtn) nextBtn.disabled = current === vis.length - 1;
 
@@ -156,7 +134,6 @@
         if (card.id) {
           try { history.replaceState(null, '', '#' + card.id); } catch (e) { /* file:// 下可能失败 */ }
         }
-        // 换卡后回到顶部，避免长卡片停在一半
         if ((window.pageYOffset || root.scrollTop) > 0) {
           window.scrollTo({ top: 0, behavior: 'auto' });
         }
@@ -175,55 +152,21 @@
     if (prevBtn) prevBtn.addEventListener('click', function () { go(-1); });
     if (nextBtn) nextBtn.addEventListener('click', function () { go(1); });
 
-    // 侧栏分类：在翻卡页拦截，改为筛选
-    catLinks.forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        var id = a.getAttribute('data-cat-filter');
-        catFilter = (catFilter === id) ? null : id;
-        applyCat();
-        current = 0;
-        clearReveal();
-        render();
-        // 移动端选完分类顺手把抽屉收起来
-        var side = doc.querySelector('[data-sidebar]');
-        if (side && window.innerWidth <= MOBILE_MAX) {
-          side.classList.remove('is-open');
-          var back = doc.querySelector('.sidebar-backdrop');
-          if (back) back.classList.remove('is-visible');
-        }
-      });
-    });
-
-    // 搜索 / 标签 / 清除筛选：app.js 已先改完 hidden，这里重新对齐位置
+    // 搜索：app.js 已先改完 hidden，这里重新对齐
     searchInputs.forEach(function (inp) {
       inp.addEventListener('input', function () { current = 0; clearReveal(); render(); });
     });
-    chips.forEach(function (chip) {
-      chip.addEventListener('click', function () { current = 0; clearReveal(); render(); });
-    });
-    if (clearBtn) clearBtn.addEventListener('click', function () {
-      catFilter = null;
-      applyCat();
+
+    // 话题 / 动词 / 难度筛选由 stage2.js 处理，处理完会派发 er:filters
+    doc.addEventListener('er:filters', function () {
       current = 0;
       clearReveal();
       render();
     });
 
-    // 初始定位：支持 /chunks.html#make-a-decision 直接打开某一张，
-    // 也支持 /chunks.html#cat-other 直接筛到某个分类
+    // 初始定位：支持 /chunks.html#make-a-decision 直接打开某一张
     var h = (location.hash || '').replace(/^#/, '');
-    if (h.indexOf('cat-') === 0) {
-      var wantCat = h.slice(4);
-      for (var k = 0; k < catLinks.length; k++) {
-        if (catLinks[k].getAttribute('data-cat-filter') === wantCat) {
-          catFilter = wantCat;
-          applyCat();
-          current = 0;
-          break;
-        }
-      }
-    } else if (h) {
+    if (h) {
       for (var i = 0; i < cards.length; i++) {
         if (cards[i].id === h) {
           var at = visible().indexOf(cards[i]);
