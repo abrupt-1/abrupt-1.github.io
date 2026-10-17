@@ -12,6 +12,7 @@
 <meta name="robots" content="index,follow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📚</text></svg>">
 <link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/stage1.css">
 <script>
   (function () {
     try {
@@ -35,6 +36,7 @@
   <nav class="top-nav">
     <a href="index.html" data-page="index">首页</a>
     <a href="chunks.html" data-page="chunks">词块库</a>
+    <a href="list.html" data-page="list">列表</a>
     <a href="method.html" data-page="method">复习方法</a>
   </nav>
   <span class="header-spacer"></span>
@@ -45,6 +47,7 @@
   </button>
 </header>
 <div class="progress-bar" data-progress></div>
+
 
 <div class="layout">
   <aside class="sidebar" data-sidebar>
@@ -57,7 +60,8 @@
       <p class="nav-group-title">站内</p>
       <ul class="nav-list">
         <li><a href="index.html" data-page="index">首页 · 学习路线</a></li>
-        <li><a href="chunks.html" data-page="chunks">词块库（82 条）</a></li>
+        <li><a href="chunks.html" data-page="chunks">词块库 · 翻卡（82 条）</a></li>
+        <li><a href="list.html" data-page="list">全部列表 · 搜索打印</a></li>
         <li><a href="method.html" data-page="method">复习方法</a></li>
       </ul>
     </nav>
@@ -65,12 +69,12 @@
     <nav class="nav-group" data-cat-nav>
       <p class="nav-group-title">按动词分类</p>
       <ul class="nav-list">
-        <li><a href="chunks.html#cat-make">make + 名词<span class="nav-count">14</span></a></li>
-        <li><a href="chunks.html#cat-take">take + 名词<span class="nav-count">14</span></a></li>
-        <li><a href="chunks.html#cat-do">do + 名词<span class="nav-count">12</span></a></li>
-        <li><a href="chunks.html#cat-get">get + 名词 / 形容词<span class="nav-count">12</span></a></li>
-        <li><a href="chunks.html#cat-have">have + 名词<span class="nav-count">12</span></a></li>
-        <li><a href="chunks.html#cat-other">其他高频动词搭配<span class="nav-count">18</span></a></li>
+        <li><a href="chunks.html#cat-make" data-page="chunks" data-cat-filter="make" data-cat-name="make + 名词">make + 名词<span class="nav-count" data-cat-nav-count="make">14</span></a></li>
+        <li><a href="chunks.html#cat-take" data-page="chunks" data-cat-filter="take" data-cat-name="take + 名词">take + 名词<span class="nav-count" data-cat-nav-count="take">14</span></a></li>
+        <li><a href="chunks.html#cat-do" data-page="chunks" data-cat-filter="do" data-cat-name="do + 名词">do + 名词<span class="nav-count" data-cat-nav-count="do">12</span></a></li>
+        <li><a href="chunks.html#cat-get" data-page="chunks" data-cat-filter="get" data-cat-name="get + 名词 / 形容词">get + 名词 / 形容词<span class="nav-count" data-cat-nav-count="get">12</span></a></li>
+        <li><a href="chunks.html#cat-have" data-page="chunks" data-cat-filter="have" data-cat-name="have + 名词">have + 名词<span class="nav-count" data-cat-nav-count="have">12</span></a></li>
+        <li><a href="chunks.html#cat-other" data-page="chunks" data-cat-filter="other" data-cat-name="其他高频动词搭配">其他高频动词搭配<span class="nav-count" data-cat-nav-count="other">18</span></a></li>
       </ul>
     </nav>
 
@@ -252,5 +256,6 @@
 </button>
 
 <script src="assets/js/app.js"></script>
+<script src="assets/js/stage1.js"></script>
 </body>
 </html>
