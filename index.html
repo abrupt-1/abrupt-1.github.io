@@ -37,7 +37,6 @@
   <nav class="top-nav">
     <a href="index.html" data-page="index">首页</a>
     <a href="chunks.html" data-page="chunks">词块库</a>
-    <a href="list.html" data-page="list">列表</a>
     <a href="review.html" data-page="review">复习</a>
     <a href="method.html" data-page="method">方法</a>
   </nav>
@@ -62,8 +61,7 @@
       <p class="nav-group-title">站内</p>
       <ul class="nav-list">
         <li><a href="index.html" data-page="index">首页 · 学习路线</a></li>
-        <li><a href="chunks.html" data-page="chunks">词块库 · 翻卡（82 条）</a></li>
-        <li><a href="list.html" data-page="list">全部列表 · 搜索打印</a></li>
+        <li><a href="chunks.html" data-page="chunks">词块库 · 话题总览</a></li>
         <li><a href="review.html" data-page="review">今日复习<span class="nav-badge" data-due-badge hidden>0</span></a></li>
         <li><a href="method.html" data-page="method">复习方法</a></li>
       </ul>
@@ -72,34 +70,53 @@
     <nav class="nav-group">
       <p class="nav-group-title">按话题分类</p>
       <ul class="nav-list" data-topicnav>
-        <li><a href="list.html#topic-edu" data-page="list" data-topic-filter="edu">教育与学术<span class="nav-count" data-topic-nav-count="edu">27</span></a></li>
-        <li><a href="list.html#topic-work" data-page="list" data-topic-filter="work">工作与经济<span class="nav-count" data-topic-nav-count="work">13</span></a></li>
-        <li><a href="list.html#topic-society" data-page="list" data-topic-filter="society">社会与政策<span class="nav-count" data-topic-nav-count="society">16</span></a></li>
-        <li><a href="list.html#topic-life" data-page="list" data-topic-filter="life">日常生活<span class="nav-count" data-topic-nav-count="life">16</span></a></li>
-        <li><a href="list.html#topic-env" data-page="list" data-topic-filter="env">环境与健康<span class="nav-count" data-topic-nav-count="env">6</span></a></li>
-        <li><a href="list.html#topic-tech" data-page="list" data-topic-filter="tech">科技与媒体<span class="nav-count" data-topic-nav-count="tech">2</span></a></li>
-        <li><a href="list.html#topic-culture" data-page="list" data-topic-filter="culture">文化与心理<span class="nav-count" data-topic-nav-count="culture">2</span></a></li>
+        <li><a href="chunks-edu.html" data-page="chunks-edu">教育与学术<span class="nav-count" data-topic-nav-count="edu">27</span></a></li>
+        <li><a href="chunks-work.html" data-page="chunks-work">工作与经济<span class="nav-count" data-topic-nav-count="work">13</span></a></li>
+        <li><a href="chunks-society.html" data-page="chunks-society">社会与政策<span class="nav-count" data-topic-nav-count="society">16</span></a></li>
+        <li><a href="chunks-life.html" data-page="chunks-life">日常生活<span class="nav-count" data-topic-nav-count="life">16</span></a></li>
+        <li><a href="chunks-env.html" data-page="chunks-env">环境与健康<span class="nav-count" data-topic-nav-count="env">6</span></a></li>
+        <li><a href="chunks-tech.html" data-page="chunks-tech">科技与媒体<span class="nav-count" data-topic-nav-count="tech">2</span></a></li>
+        <li><a href="chunks-culture.html" data-page="chunks-culture">文化与心理<span class="nav-count" data-topic-nav-count="culture">2</span></a></li>
       </ul>
     </nav>
 
     <nav class="nav-group">
       <p class="nav-group-title">筛选 · 动词</p>
       <div class="chip-row" data-verbchips>
-        <button type="button" class="facet-chip" data-verb="make">make<span class="chip-count">14</span></button>
-        <button type="button" class="facet-chip" data-verb="take">take<span class="chip-count">14</span></button>
-        <button type="button" class="facet-chip" data-verb="do">do<span class="chip-count">12</span></button>
-        <button type="button" class="facet-chip" data-verb="get">get<span class="chip-count">12</span></button>
-        <button type="button" class="facet-chip" data-verb="have">have<span class="chip-count">12</span></button>
-        <button type="button" class="facet-chip" data-verb="other">other<span class="chip-count">18</span></button>
+        <button type="button" class="facet-chip" data-verb="make" data-name="make">make<span class="chip-count">14</span></button>
+        <button type="button" class="facet-chip" data-verb="take" data-name="take">take<span class="chip-count">14</span></button>
+        <button type="button" class="facet-chip" data-verb="do" data-name="do">do<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="get" data-name="get">get<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="have" data-name="have">have<span class="chip-count">12</span></button>
+        <button type="button" class="facet-chip" data-verb="other" data-name="other">other<span class="chip-count">18</span></button>
       </div>
     </nav>
 
     <nav class="nav-group">
       <p class="nav-group-title">筛选 · 难度</p>
       <div class="chip-row" data-levelchips>
-        <button type="button" class="facet-chip" data-level="B1">B1<span class="chip-count">7</span></button>
-        <button type="button" class="facet-chip" data-level="B1+">B1+<span class="chip-count">20</span></button>
-        <button type="button" class="facet-chip" data-level="B2">B2<span class="chip-count">55</span></button>
+        <button type="button" class="facet-chip" data-level="B1" data-name="B1">B1<span class="chip-count">7</span></button>
+        <button type="button" class="facet-chip" data-level="B1+" data-name="B1+">B1+<span class="chip-count">20</span></button>
+        <button type="button" class="facet-chip" data-level="B2" data-name="B2">B2<span class="chip-count">55</span></button>
+      </div>
+    </nav>
+
+    <nav class="nav-group">
+      <p class="nav-group-title">筛选 · 类型</p>
+      <div class="chip-row" data-typechips>
+        <button type="button" class="facet-chip" data-type="v" data-name="动词类">动词类<span class="chip-count">82</span></button>
+        <button type="button" class="facet-chip" data-type="a" data-name="形容词类">形容词类<span class="chip-count">0</span></button>
+        <button type="button" class="facet-chip" data-type="n" data-name="名词短语">名词短语<span class="chip-count">0</span></button>
+        <button type="button" class="facet-chip" data-type="f" data-name="写作句式">写作句式<span class="chip-count">0</span></button>
+      </div>
+    </nav>
+
+    <nav class="nav-group">
+      <p class="nav-group-title">筛选 · 用途</p>
+      <div class="chip-row" data-purposechips>
+        <button type="button" class="facet-chip" data-purpose="speak" data-name="口语">口语<span class="chip-count">28</span></button>
+        <button type="button" class="facet-chip" data-purpose="write" data-name="写作">写作<span class="chip-count">3</span></button>
+        <button type="button" class="facet-chip" data-purpose="both" data-name="通用">通用<span class="chip-count">51</span></button>
       </div>
     </nav>
 
@@ -201,11 +218,11 @@
         <p>间隔重复的具体节奏、自测怎么做、以及动词搭配的易错清单。</p>
         <span class="card-meta">建议先读这一页</span>
       </a>
-      <a class="card" href="chunks.html#cat-other">
-        <span class="card-icon" aria-hidden="true">✍️</span>
-        <h3>写作高频搭配</h3>
-        <p>give rise to、play a role in、raise awareness of 等论述型搭配，Task 2 直接用得上。</p>
-        <span class="card-meta">18 条 · 适合写作</span>
+      <a class="card" href="review.html">
+        <span class="card-icon" aria-hidden="true">✅</span>
+        <h3>今日复习</h3>
+        <p>三档评分（忘了 / 模糊 / 记住）＋ 固定间隔排期，每天只做排到今天的那些。</p>
+        <span class="card-meta">进度存本地 · 可导出备份</span>
       </a>
     </div>
 

@@ -112,130 +112,115 @@
                  : '还没开始复习 · <a href="review.html">开始第一次复习 →</a>');
   }
 
-  /* ================= 三组筛选 ================= */
+  /* ================= 四组筛选（动词 / 难度 / 类型 / 用途） ================= */
 
   (function facets() {
     var cards = Array.prototype.slice.call(doc.querySelectorAll('.chunk-card'));
     if (!cards.length) return;
 
-    var topicLinks = Array.prototype.slice.call(doc.querySelectorAll('[data-topic-filter]'));
-    var verbChips = Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-verb]'));
-    var levelChips = Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-level]'));
-    var sections = Array.prototype.slice.call(doc.querySelectorAll('[data-topic-section]'));
+    var ATTR = {
+      verb: 'data-verb',
+      level: 'data-level',
+      type: 'data-type',
+      purpose: 'data-purpose'
+    };
+
+    var GROUPS = {
+      verb: Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-verb]')),
+      level: Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-level]')),
+      type: Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-type]')),
+      purpose: Array.prototype.slice.call(doc.querySelectorAll('.facet-chip[data-purpose]'))
+    };
+
     var searchInputs = Array.prototype.slice.call(doc.querySelectorAll('[data-search]'));
     var noRes = doc.querySelector('[data-no-result]');
     var activeBox = doc.querySelector('[data-active-filters]');
     var clearBtn = doc.querySelector('[data-clear-filters]');
     var countEl = doc.querySelector('[data-count]');
 
-    var state = { topic: null, verb: null, level: null };
-
-    // 支持从 list.html#topic-edu 直接进入某个话题
-    var h = (location.hash || '').replace(/^#/, '');
-    if (h.indexOf('topic-') === 0) state.topic = h.slice(6);
+    var state = { verb: null, level: null, type: null, purpose: null };
 
     function matches(c) {
-      if (state.topic && c.getAttribute('data-topic') !== state.topic) return false;
-      if (state.verb && c.getAttribute('data-verb') !== state.verb) return false;
-      if (state.level && c.getAttribute('data-level') !== state.level) return false;
+      for (var k in ATTR) {
+        if (state[k] && c.getAttribute(ATTR[k]) !== state[k]) return false;
+      }
       return true;
     }
 
+    function labelOf(key) {
+      var chips = GROUPS[key];
+      for (var i = 0; i < chips.length; i++) {
+        if (chips[i].getAttribute(ATTR[key]) === state[key]) {
+          return chips[i].getAttribute('data-name') || state[key];
+        }
+      }
+      return state[key];
+    }
+
     function apply() {
-      var shown = 0;
-      var visibleAfterSearch = 0;
+      var visAfterSearch = 0;
 
       cards.forEach(function (c) {
         var ok = matches(c);
-        if (ok) { c.removeAttribute('data-facet-hidden'); shown++; }
+        if (ok) c.removeAttribute('data-facet-hidden');
         else c.setAttribute('data-facet-hidden', '');
-        // 工具栏计数要同时反映搜索与应用层筛选的结果
-        if (!c.hidden && ok) visibleAfterSearch++;
+        if (!c.hidden && ok) visAfterSearch++;
       });
 
-      if (countEl) countEl.textContent = visibleAfterSearch + ' / ' + cards.length + ' 条';
+      if (countEl) countEl.textContent = visAfterSearch + ' / ' + cards.length + ' 条';
 
-      // 话题区块：没有可见卡片就整块隐藏，并刷新计数
-      sections.forEach(function (sec) {
-        var n = sec.querySelectorAll('.chunk-card:not([hidden]):not([data-facet-hidden])').length;
-        sec.hidden = n === 0;
-        var badge = sec.querySelector('[data-topic-count]');
-        if (badge) badge.textContent = n + ' 条';
-      });
-
-      // 界面状态
-      topicLinks.forEach(function (a) {
-        a.classList.toggle('is-active', a.getAttribute('data-topic-filter') === state.topic);
-      });
-      verbChips.forEach(function (b) {
-        b.classList.toggle('is-on', b.getAttribute('data-verb') === state.verb);
-      });
-      levelChips.forEach(function (b) {
-        b.classList.toggle('is-on', b.getAttribute('data-level') === state.level);
-      });
+      for (var key in GROUPS) {
+        (function (key) {
+          GROUPS[key].forEach(function (b) {
+            b.classList.toggle('is-on', b.getAttribute(ATTR[key]) === state[key]);
+          });
+        })(key);
+      }
 
       if (activeBox) {
         var parts = [];
-        if (state.topic) {
-          var tl = null;
-          for (var i = 0; i < topicLinks.length; i++) {
-            if (topicLinks[i].getAttribute('data-topic-filter') === state.topic) { tl = topicLinks[i]; break; }
-          }
-          parts.push('<span class="facet-pill">' + (tl ? tl.firstChild.textContent.trim() : state.topic) + '</span>');
+        for (var k in ATTR) {
+          if (state[k]) parts.push('<span class="facet-pill">' + labelOf(k) + '</span>');
         }
-        if (state.verb) parts.push('<span class="facet-pill">' + state.verb + '</span>');
-        if (state.level) parts.push('<span class="facet-pill">' + state.level + '</span>');
-        activeBox.innerHTML = parts.length ? parts.join('') : '<span class="facet-none">未筛选</span>';
+        activeBox.innerHTML = parts.length
+          ? parts.join('')
+          : '<span class="facet-none">未筛选</span>';
       }
 
-      var any = !!(state.topic || state.verb || state.level);
+      var any = false;
+      for (var k2 in state) if (state[k2]) any = true;
       if (clearBtn) clearBtn.hidden = !any;
-      if (noRes) noRes.hidden = visibleAfterSearch !== 0;
+      if (noRes) noRes.hidden = visAfterSearch !== 0;
 
       doc.dispatchEvent(new CustomEvent('er:filters'));
     }
 
-    function toggle(key, val) {
-      state[key] = (state[key] === val) ? null : val;
-      apply();
+    function bind(key) {
+      GROUPS[key].forEach(function (b) {
+        b.addEventListener('click', function () {
+          var v = b.getAttribute(ATTR[key]);
+          state[key] = (state[key] === v) ? null : v;
+          apply();
+        });
+      });
     }
 
-    // 有卡片时才拦截话题链接，否则放行跳转（例如在复习页点话题应跳到列表页）
-    topicLinks.forEach(function (a) {
-      a.addEventListener('click', function (e) {
-        e.preventDefault();
-        toggle('topic', a.getAttribute('data-topic-filter'));
-        closeDrawer();
-      });
-    });
-
-    verbChips.forEach(function (b) {
-      b.addEventListener('click', function () { toggle('verb', b.getAttribute('data-verb')); });
-    });
-
-    levelChips.forEach(function (b) {
-      b.addEventListener('click', function () { toggle('level', b.getAttribute('data-level')); });
-    });
+    bind('verb');
+    bind('level');
+    bind('type');
+    bind('purpose');
 
     if (clearBtn) {
       clearBtn.addEventListener('click', function () {
-        state = { topic: null, verb: null, level: null };
+        for (var k in state) state[k] = null;
         apply();
       });
     }
 
-    // 搜索变化后（app.js 已改完 hidden）重新评估空态
+    // 搜索变化后（app.js 已改完 hidden）重新评估计数与空态
     searchInputs.forEach(function (inp) {
       inp.addEventListener('input', function () { apply(); });
     });
-
-    function closeDrawer() {
-      if (window.innerWidth > 1080) return;
-      var side = doc.querySelector('[data-sidebar]');
-      if (side) side.classList.remove('is-open');
-      var back = doc.querySelector('.sidebar-backdrop');
-      if (back) back.classList.remove('is-visible');
-    }
 
     apply();
   })();
@@ -306,7 +291,7 @@
       for (var id2 in store.items) {
         if (store.items[id2] && store.items[id2].first === t) newToday++;
       }
-      var room = Math.max(0, NEW_PER_DAY - newToday);
+      var room = Math.max(0, (store.newPerDay || NEW_PER_DAY) - newToday);
       var fresh = [];
       for (var i = 0; i < data.length && fresh.length < room; i++) {
         if (!store.items[data[i].i]) fresh.push(data[i].i);
@@ -512,6 +497,7 @@
             merged.items = incoming.items;
             if (!saveStore(merged)) throw new Error('写入本地存储失败');
             store = merged;
+            syncLimit();
             setDirectionLabel();
             buildQueue();
             renderStats();
@@ -533,6 +519,7 @@
         if (!window.confirm('清空所有复习进度？此操作不可撤销，建议先导出备份。')) return;
         try { localStorage.removeItem(STORE_KEY); } catch (e) {}
         store = blankStore();
+        syncLimit();
         setDirectionLabel();
         buildQueue();
         renderStats();
@@ -542,7 +529,22 @@
       });
     }
 
+    /* --- 每天新卡上限 --- */
+    var limitSel = doc.querySelector('[data-newlimit]');
+    function syncLimit() {
+      if (limitSel) limitSel.value = String(store.newPerDay || NEW_PER_DAY);
+    }
+    if (limitSel) {
+      limitSel.addEventListener('change', function () {
+        var v = parseInt(limitSel.value, 10);
+        store.newPerDay = (v > 0 && v <= 200) ? v : NEW_PER_DAY;
+        saveStore(store);
+        if (msgEl) msgEl.textContent = '每天新卡已设为 ' + store.newPerDay + ' 条，下次进入复习页生效。';
+      });
+    }
+
     /* --- 启动 --- */
+    syncLimit();
     setDirectionLabel();
     renderStats();
     buildQueue();
